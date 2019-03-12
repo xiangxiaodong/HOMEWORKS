@@ -27,6 +27,7 @@ for i in range(1,2):
 
 	if response.status_code == 200:#判断是否得到返回
 		print(response.content)
+		print(response.text)
 		datas = json.loads(response.content).get("data").get("item")
 		if len(datas) == 0:#如果获取的数据中没有数据，结束
 			break
