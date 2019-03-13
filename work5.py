@@ -2,7 +2,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-request_url = "https://search.bilibili.com/all?keyword=Python&from_source=banner_search&spm_id_from=333.334.banner_link.1&page={}"
+#request_url = "https://search.bilibili.com/all?keyword=Python&from_source=banner_search&spm_id_from=333.334.banner_link.1&page={}"
 
 headers = {
 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -26,14 +26,15 @@ for i in range(1, 51):  # 实际是1-50，取不到50
 	response = requests.get(url=request_url, headers=headers)
 	if response.status_code == 200:  # 加判断
 		html = response.text
-		soup = BeautifulSoup(html, "lxml")
+		soup = BeautifulSoup(html, "lxml")#需要先安装lxml解析库
+
+		#print(soup.prettify())
 
 		items = soup.find_all("li", {'class': 'video matrix'})  # 查找标签为li，且属性为video matrix的元素
 		for item in items:
-			href = item.find('a', {'class': 'title'}).get('href').repalce('//', '')
+			href = item.find('a').get('href').replace('//','')
 			title = item.find('a', {'class': 'title'}).get('title')
 			views = item.find('span', {'class': 'so-icon watch-num'}).get_text().strip()  # 去掉空格
-			create_time = item.find('span', {'class': 'so-icon time'}).get_text().strip().repalce("('", "").repalce(
-				"',)", "")  # 去除两边的括号
+			create_time = item.find('span', {'class': 'so-icon time'}).get_text().strip()
 			author = item.find('a', {'class': 'up-name'}).get_text()
 			print(href, title, views, create_time, author)
